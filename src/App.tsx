@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Accept, useDropzone } from "react-dropzone"; // Import react-dropzone
-import { uploadImage, ApiResponse } from "./services/detection.service";
+import {
+  uploadImage,
+  ApiResponse,
+  DataResponse,
+} from "./services/detection.service";
 import "./App.css";
 
 const App: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<DataResponse | null>();
   const [error, setError] = useState<string | null>(null);
 
   const handleFileUpload = async () => {
     if (!selectedFile) {
-      alert("Silakan pilih file terlebih dahulu.");
+      alert("Please select a file first.");
       return;
     }
 
@@ -24,11 +28,13 @@ const App: React.FC = () => {
       if (response.is_success) {
         setResult(response.data);
       } else {
-        setError(response.error || "Terjadi kesalahan saat mendeteksi objek.");
+        setError(
+          response.error || "An error occurred during object detection."
+        );
       }
     } catch (err) {
       console.error(err);
-      setError("Gagal mengunggah gambar. Silakan coba lagi.");
+      setError("Failed to upload the image. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -67,46 +73,75 @@ const App: React.FC = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleDrop,
     accept: {
-      'image/*': ['.jpg', '.png', '.gif'],  // Accept image files
-      'video/*': ['.mp4', '.avi', '.mov'], // Accept video files
-    } as Accept, // Menggunakan tipe Accept dari react-dropzone
+      "image/*": [".jpg", ".png", ".gif"], // Accept image files
+      "video/*": [".mp4", ".avi", ".mov"], // Accept video files
+    } as Accept,
   });
 
   return (
     <div className="container">
       <div className="header mb-5">
-        <div className="h1 text-center text-primary fw-bold">
-          Sistem Deteksi Objek
+        <div className="display-6 text-center text-primary fw-bold poppins-semibold">
+          OBJECT IDENTIFICATION
         </div>
         <div className="text-center text-gray fs-5">
-          Unggah gambar atau video untuk menganalisis objek pada media
+          Upload an image or video to analyze objects in the media
         </div>
       </div>
       <div className="row g-5">
         <div className="col-12 col-md-5">
           <div className="card" style={{ borderRadius: 20 }}>
             <div className="card-body p-4">
-              <h5 className="card-title text-center">Hasil Deteksi</h5>
+              <h5 className="card-title text-center">Detection Results</h5>
               <hr />
               <div className="card-text py-auto" style={{ height: 200 }}>
                 {isLoading ? (
                   <div className="text-center fs-5 text-gray mt-5">
-                    Harap Tunggu, Model sedang dimuat...
+                    Please wait, the model is loading...
                   </div>
                 ) : error ? (
                   <div className="text-danger text-center mt-5">{error}</div>
                 ) : result ? (
-                  <div className="text-center fw-bold mt-5 display-4 text-uppercase">
-                    <strong>{result}</strong>
-                  </div>
+                  <>
+                    <div className="text-center fw-bold mt-5 display-6 text-uppercase">
+                      <strong>{result.entity}</strong>
+                    </div>
+                    <div className="text-center fw-bold mt-5 text-gray fs-4">
+                      <div>Score: {result.confidence_score}</div>
+                    </div>
+                  </>
                 ) : (
                   <div className="text-center fs-5 text-gray mt-5">
-                    Tidak ada hasil deteksi.
+                    No detection results.
                   </div>
                 )}
               </div>
             </div>
           </div>
+          {selectedFile && !isLoading && (
+            <div className="row">
+              <div className="col">
+                {selectedFile && (
+                  <div className="d-flex justify-content-center">
+                    <button
+                      onClick={handleRemoveFile}
+                      className="btn btn-danger w-100 py-3 fw-bold mt-3"
+                    >
+                      REMOVE FILE
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="col">
+                <button
+                  onClick={handleFileUpload}
+                  className="btn btn-primary w-100 py-3 fw-bold mt-3"
+                >
+                  DETECT MEDIA
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <div className="col-12 col-md-7">
           <div className="card text-center" style={{ borderRadius: 20 }}>
@@ -127,44 +162,20 @@ const App: React.FC = () => {
                       className="card-text text-gray fw-medium"
                       style={{ fontSize: "1.2rem" }}
                     >
-                      Tarik dan lepas gambar atau video anda disini <br />
-                      atau klik untuk memilih file
+                      Drag and drop your image or video here <br />
+                      or click to select a file
                     </p>
                     <p
                       className="card-text text-gray fw-medium"
                       style={{ fontSize: "1.2rem" }}
                     >
-                      Mendukung: JPG, PNG, GIF, MP4, MOV, AVI
+                      Supported: JPG, JPEG, PNG, MP4
                     </p>
                   </div>
                 </div>
               )}
             </div>
           </div>
-          {selectedFile && !isLoading && (
-            <div className="row">
-              <div className="col">
-                {selectedFile && (
-                  <div className="d-flex justify-content-center">
-                    <button
-                      onClick={handleRemoveFile}
-                      className="btn btn-danger w-100 py-3 fw-bold mt-3"
-                    >
-                      HAPUS FILE
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="col">
-                <button
-                  onClick={handleFileUpload}
-                  className="btn btn-primary w-100 py-3 fw-bold mt-3"
-                >
-                  DETEKSI MEDIA
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

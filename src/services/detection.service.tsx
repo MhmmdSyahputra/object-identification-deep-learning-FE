@@ -1,7 +1,11 @@
 import axios from "axios";
 
+export interface DataResponse {
+  confidence_score: number;
+  entity: string;
+}
 export interface ApiResponse {
-  data: string | null;
+  data: DataResponse;
   error: string | null;
   is_success: boolean;
 }
