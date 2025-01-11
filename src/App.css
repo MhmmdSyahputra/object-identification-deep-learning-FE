@@ -5,31 +5,6 @@
   text-align: center;
 }
 
-#ready-to {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.custom-file-upload,
-button {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  gap: 10px;
-  border: 2px solid black;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-#file-upload {
-  display: none;
-}
-
-.upload-icon {
-  width: 30px;
-}
 
 #image-container {
   width: 100%;
@@ -39,33 +14,6 @@ button {
 
 #image-container > img {
   width: 100%;
-}
-
-.bounding-box {
-  position: absolute;
-  box-sizing: border-box;
-  border-width: 2px;
-  border-style: solid;
-}
-
-.bounding-box-label {
-  color: white;
-  position: absolute;
-  font-size: 12px;
-  margin-top: -16px;
-  margin-left: -2px;
-  padding: 1px;
-}
-
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-  display: none;
-  margin: auto;
 }
 
 @keyframes spin {
@@ -104,10 +52,9 @@ text-primary {
 
 .card-text {
     scrollbar-width: thin;
-    scrollbar-color: #5353d8 #f8f9fa; /* warna scroll bar */
+    scrollbar-color: #5353d8 #f8f9fa;
   }
 
-  /* Chrome, Safari, Edge */
   .card-text::-webkit-scrollbar {
     width: 8px;
   }
@@ -123,7 +70,6 @@ text-primary {
     border-radius: 10px;
   }
 
-  /* Efek hover pada scrollbar */
   .card-text::-webkit-scrollbar-thumb:hover {
     background-color: #495057;
   }

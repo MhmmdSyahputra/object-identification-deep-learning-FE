@@ -152,7 +152,7 @@ const App: React.FC = () => {
                             <img src={frame.url} alt="" className="img-fluid" width={80}/>
                           </div>
                           <div className="text-end">
-                            <div className="text-dark fw-bold fs-4">{frame.entity} </div>
+                            <div className="text-dark fw-bold fs-4 text-uppercase">{frame.entity} </div>
                             <div className="">Score: {frame.confidence_score}</div>
                           </div>
                         </div>
